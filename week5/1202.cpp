@@ -10,7 +10,7 @@ vector<long long> bags;
 
 priority_queue<int> pq;
 
-long long ret;
+int ret;
 
 int main() {
     cin >> n >> k;
@@ -30,15 +30,10 @@ int main() {
 
     int j = 0;
     for(int i = 0; i < k; i++) {
-        for(; j < n; j++) {
-            if(crystals[j].first <= bags[i]) {
-                pq.push(crystals[j].second);
-            }
-            else {
-                break;
-            }
+        while(j < n && crystals[j].first <= bags[i]) {
+            pq.push(crystals[j].second);
+            j++;
         }
-
         if(pq.size()) {
             ret += pq.top();
             pq.pop();
