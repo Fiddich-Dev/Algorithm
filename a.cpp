@@ -1,33 +1,40 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 
-int n, m;
-string s;
-vector<string> v;
-map<string, int> m1;
-string temp;
+int n;
+ll t;
+
+bool check(ll a) {
+
+    if(a == 0 || a == 1) {
+        return false;
+    }
+
+    for(int i = 2; i <= sqrt(a); i++) {
+        if(a % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
 
 int main() {
-
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
 
-    cin >> n >> m;
+    cin >> n;
+
     for(int i = 0; i < n; i++) {
-        cin >> s;
-        v.push_back(s);
-        m1[s] = i + 1;
-    }
-    for(int i = 0; i < m; i++) {
-        cin >> temp;
-        // 문자일때
-        if(atoi(temp.c_str()) == 0) {
-            cout << m1[temp] << "\n";
-        }
-        // 숫자일때
-        else {
-            cout << v[atoi(temp.c_str()) - 1] << "\n";
+        cin >> t;
+
+        while(true) {
+            if(check(t) == true) {
+                cout << t << "\n";
+                break;
+            }
+            t++;
         }
     }
 }
