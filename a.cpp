@@ -1,40 +1,34 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
 
-int n;
-ll t;
+int ret;
 
-bool check(ll a) {
+int binarySearch(vector<int> arr, int target) {
+    int left = 0;
+    int right = arr.size();
 
-    if(a == 0 || a == 1) {
-        return false;
-    }
-
-    for(int i = 2; i <= sqrt(a); i++) {
-        if(a % i == 0) {
-            return false;
+    while(left <= right) {
+        int mid = left + (right - left) / 2;
+        if(arr[mid] == target) {
+            return mid;
+        }
+        else if(arr[mid] > target) {
+            right = mid - 1;
+        }
+        else if(arr[mid] < target) {
+            left = mid + 1;
         }
     }
-    return true;
+    return -1;
 }
 
+
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+    vector<int> arr = {1, 3, 6, 9, 10, 21, 22, 30};
+    sort(arr.begin(), arr.end());
+    int target = 6;
 
-    cin >> n;
+    ret = binarySearch(arr, target);
 
-    for(int i = 0; i < n; i++) {
-        cin >> t;
-
-        while(true) {
-            if(check(t) == true) {
-                cout << t << "\n";
-                break;
-            }
-            t++;
-        }
-    }
+    cout << ret << "\n";
 }
