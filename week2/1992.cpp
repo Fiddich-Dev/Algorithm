@@ -51,6 +51,4 @@ int main() {
 
     go(0, 0, n);
     cout << "\n";
-
-
 }
