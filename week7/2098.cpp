@@ -6,7 +6,6 @@ int n;
 int a[16][16];
 int dp[16][1 << 16];
 
-// 바텀업
 int go(int here, int visited) {
     if(visited == (1 << n) - 1) {
         return a[here][0] ? a[here][0] : 987654321;
@@ -34,9 +33,7 @@ int go(int here, int visited) {
     return ret = m;
 }
 
-// 테이블 : dp[현재위치][방문한곳들] = 지금까지의 비용
-// 점화식 : dp[현재위치][방문한곳들] = min(dp[이전위치][이전까지 방문했던 곳들] + a[이전위치][현재위치])
-// 초기화 : dp
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
