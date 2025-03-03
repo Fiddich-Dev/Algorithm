@@ -36,7 +36,6 @@ int go(int y, int x) {
     
     ret = max({q, w, e, r}) + 1;
 
-    // 4방향 탐색후 원복
     visited[y][x] = 0;
 
 
