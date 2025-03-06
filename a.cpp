@@ -1,43 +1,55 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int t;
-string a;
 
-bool check(string s) {
-    stack<char> stk;
+int V, E;
+int k;
+int u, v, w;
 
-    for(int i = 0; i < s.size(); i++) {
-        if(s[i] == '(') {
-            stk.push(s[i]);
+const int INF = 1e9;
+vector<pair<int, int>> adj[20004];
+vector<int> dist(20004, INF);
+
+ void dijkstra(int start) {
+    priority_queue<pair<int, int> , vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    dist[start] = 0;
+    pq.push({0, start});
+
+    while(pq.size()) {
+        int here_cost = pq.top().first;
+        int u = pq.top().second;
+        pq.pop();
+
+        if(dist[u] != here_cost) {
+            continue;
         }
-        if(s[i] == ')') {
-            if(stk.size() && stk.top() == '(') {
-                stk.pop();
+
+        for(auto there : adj[u]) {
+            int new_cost = here_cost + there.first;
+            if(new_cost < dist[there.second]) {
+                dist[there.second] = new_cost;
+                pq.push({new_cost, there.second});
             }
-            else {
-                stk.push(')');
-            }
         }
     }
-    if(stk.size() == 0) {
-        return true;
-    }
-    else {
-        return false;
-    }
-} 
+ }
 
-int main() {
-    cin >> t;
-    for(int i = 0; i < t; i++) {
-        cin >> a;
-        if(check(a) == true) {
-            cout << "YES\n";
+ 
+ int main() {
+    cin >> V >> E;
+    cin >> k;
+    for(int i = 0; i < E; i++) {
+        cin >> u >> v >> w;
+        adj[u].push_back({w, v});
+    }
+
+    dijkstra(1);
+    
+    for(int i = 0; i < V; i++) {
+        if(dist[i+1] == INF) {
+            cout << "INF\n";
+            continue;
         }
-        else {
-            cout << "NO\n";
-        }
+        cout << dist[i+1] << "\n";
     }
 }
-
