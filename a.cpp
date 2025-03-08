@@ -1,55 +1,53 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 
+int n, m;
+int a, b, c;
+const int INF = 987654321;
+ll dist[504];
+ll visited[504];
+vector<pair<int, int>> adj[504];
 
-int V, E;
-int k;
-int u, v, w;
+int main() {
 
-const int INF = 1e9;
-vector<pair<int, int>> adj[20004];
-vector<int> dist(20004, INF);
+    fill(dist, dist + 504, INF); 
+    cin >> n >> m;
+    for(int i = 0; i < m; i++) {
+        cin >> a >> b >> c;
+        a--;
+        b--;
+        adj[a].push_back({b, c});
+    }
 
- void dijkstra(int start) {
-    priority_queue<pair<int, int> , vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    dist[start] = 0;
-    pq.push({0, start});
+    dist[0] = 0;
+    queue<int> q;
 
-    while(pq.size()) {
-        int here_cost = pq.top().first;
-        int u = pq.top().second;
-        pq.pop();
-
-        if(dist[u] != here_cost) {
-            continue;
-        }
-
-        for(auto there : adj[u]) {
-            int new_cost = here_cost + there.first;
-            if(new_cost < dist[there.second]) {
-                dist[there.second] = new_cost;
-                pq.push({new_cost, there.second});
+    for(int i = 0; i < n; i++) {
+        for(int here = 0; here < n; here++) {
+            for(pair<int, int> there : adj[here]) {
+                int d = there.second;
+                int to = there.first;
+                if(dist[here] != INF && dist[here] + d < dist[to]) {
+                    if(i == n-1) {
+                        q.push(to);
+                    }
+                    dist[to] = dist[here] + d;
+                }
             }
         }
     }
- }
 
- 
- int main() {
-    cin >> V >> E;
-    cin >> k;
-    for(int i = 0; i < E; i++) {
-        cin >> u >> v >> w;
-        adj[u].push_back({w, v});
+    if(q.size()) {
+        cout << -1 << "\n";
+        return 0;
     }
-
-    dijkstra(1);
-    
-    for(int i = 0; i < V; i++) {
-        if(dist[i+1] == INF) {
-            cout << "INF\n";
-            continue;
+    for(int i = 1; i < n; i++) {
+        if(dist[i] == INF) {
+            cout << -1 << "\n";
         }
-        cout << dist[i+1] << "\n";
+        else {
+            cout << dist[i] << "\n";
+        }
     }
 }
