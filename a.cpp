@@ -2,38 +2,34 @@
 using namespace std;
 
 int n;
-int temp;
-vector<int> v;
-int ret[1000004];
+int p, d;
+vector<pair<int, int>> v;
+priority_queue<int, vector<int>, greater<int>> pq;
+int ret;
+
 
 int main() {
-
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
-    memset(ret, -1, sizeof(ret));
     cin >> n;
     for(int i = 0; i < n; i++) {
-        cin >> temp;
-        v.push_back(temp);
+        cin >> p >> d;
+        v.push_back({d, p});
     }
 
-    stack<int> stk;
+    sort(v.begin(), v.end());
 
+    // 우선순위 큐의 사이즈는 현재 고른 강의의 데드라인 보다 작거나 같아야한다
     for(int i = 0; i < n; i++) {
+        pq.push(v[i].second);
 
-        while(stk.size() && v[stk.top()] < v[i]) {
-            ret[stk.top()] = v[i];
-            stk.pop();
+        if(pq.size() > v[i].first) {
+            pq.pop();
         }
-        stk.push(i);
-
     }
 
-    for(int i = 0; i < n; i++) {
-        cout << ret[i] << " ";
+    while(pq.size()) {
+        ret += pq.top();
+        pq.pop();
     }
-    cout << "\n";
-    
+
+    cout << ret << "\n";
 }
