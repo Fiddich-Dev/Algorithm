@@ -3,48 +3,48 @@ using namespace std;
 
 int n, m;
 int a[54][54];
-vector<pair<int, int>> chicken;
-vector<pair<int, int>> home;
 
-int ret = 987654321;
+// 모든 치킨집
+vector<pair<int, int>> c;
+// 집
+vector<pair<int, int>> h;
 
-// 치킨집의 좌표를 입력받으면 도시의 치킨거리를 return
-// 치킨 거리는 집에서 치킨집 중의 최소거리
-int dist(vector<pair<int, int>> b) {
-    int sum = 0;
-    for(pair<int, int> h : home) {
-        int temp = 987654321;
-        for(pair<int, int> c : b) {
-            temp = min(temp, abs(h.first - c.first) + abs(h.second - c.second));
-        }
-        sum += temp;
-    }
-    return sum;
-}
+int ret = 1e9;
+
 
 void combi(int start, vector<pair<int, int>> b) {
     if(b.size() == m) {
-        ret = min(ret, dist(b));
+        int sum = 0;
+        for(int i = 0; i < h.size(); i++) {
+            int mn = 1e9;
+            for(int j = 0; j < m; j++) {
+                mn = min(mn, abs(h[i].first - b[j].first) + abs(h[i].second - b[j].second));
+            }    
+            sum += mn;
+        }
+        ret = min(ret, sum);
         return;
     }
-    for(int i = start+1; i < chicken.size(); i++) {
-        b.push_back({chicken[i].first, chicken[i].second});
+    for(int i = start+1; i < c.size(); i++) {
+        b.push_back(c[i]);
         combi(i, b);
         b.pop_back();
     }
 }
 
-// 0은 빈 칸, 1은 집, 2는 치킨집이다.
+
+// 0은 빈 칸, 1은 집, 2는 치킨집
 int main() {
+
     cin >> n >> m;
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < n; j++) {
             cin >> a[i][j];
-            if(a[i][j] == 2) {
-                chicken.push_back({i, j});
+            if(a[i][j] == 1) {
+                h.push_back({i, j});
             }
-            else if(a[i][j] == 1) {
-                home.push_back({i, j});
+            else if(a[i][j] == 2) {
+                c.push_back({i, j});
             }
         }
     }
@@ -53,6 +53,4 @@ int main() {
     combi(-1, v);
 
     cout << ret << "\n";
-
 }
-
