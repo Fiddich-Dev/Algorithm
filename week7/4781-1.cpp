@@ -2,9 +2,12 @@
 using namespace std;
 
 int n;
-float m;
+int m;
+int m1, m2;
+
 int c;
-float p;
+int p;
+int p1, p2;
 
 // dp[돈] = 칼로리
 int dp[10004];
@@ -13,38 +16,36 @@ int dp[10004];
 int main() {
 
     while(true) {
-        cin >> n >> m;
+        scanf("%d %d.%d", &n, &m1, &m2);
+
+        int m = m1 * 100 + m2;
         
         // 칼로리
         vector<int> v1;
         // 가격
         vector<int> v2;
 
-        if(n == 0 && m == 0.00) {
+        if(n == 0 && m == 0) {
             break;
         }
-        m = round(m * 100);
 
         for(int i = 0; i < n; i++) {
-            cin >> c >> p;
-            p = round(p * 100);
+            scanf("%d %d.%d", &c, &p1, &p2);
+            
+            p = p1 * 100 + p2;
             v1.push_back(c);
             v2.push_back(p);
         }
 
-        fill(&dp[0], &dp[0]+10004, -1e9);
-        dp[0] = 0;
-        int ret = -1e9;
+        fill(&dp[0], &dp[0]+10004, 0);
 
         for(int i = 0; i < n; i++) {
             for(int j = v2[i]; j <= m; j++) {
                 dp[j] = max(dp[j], dp[j - v2[i]] + v1[i]);
-                ret = max(ret, dp[j]);
             }
         }
-
-        cout << ret << "\n";
-
+        
+        cout << dp[m] << "\n";
     }
 
 
