@@ -20,7 +20,7 @@ bool check(int a, char c, int b) {
 
 void go(vector<int> b) {
     if(b.size() == k+1) {
-        // 최대 최소 갱신
+        // 최대, 최소 갱신
         string s = "";
         for(int i : b) {
             s += to_string(i);

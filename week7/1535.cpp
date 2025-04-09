@@ -39,9 +39,9 @@ int main() {
         cin >> J[i];
     }
 
-    // // 테이블 : dp[체력] = 기쁨
-    // // 점화식 : dp[num] = max(dp[num - L[i]] + J[i])
-    // // 초기화 : dp[100] = 0
+    // 테이블 : dp[체력] = 기쁨
+    // 점화식 : dp[num] = max(dp[num - L[i]] + J[i])
+    // 초기화 : dp[100] = 0
 
     for(int i = 0; i < n; i++) {
         for(int j = 100; j > L[i]; j--) {
