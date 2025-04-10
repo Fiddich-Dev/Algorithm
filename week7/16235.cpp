@@ -13,6 +13,7 @@ int dx[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
 
 // 봄
+// 여름
 void spring() {
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < n; j++) {

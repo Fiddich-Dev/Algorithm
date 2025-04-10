@@ -9,9 +9,9 @@ int ret;
 int dy[] = {-1, 0, 1, 0};
 int dx[] = {0, 1, 0, -1};
 
-
 void go(int y, int x, int depth) {
-    
+
+    // visited[y][x] = 1;
     if(depth > k) {
         return;
     }
@@ -31,7 +31,7 @@ void go(int y, int x, int depth) {
             continue;
         }
         if(visited[ny][nx] == 0 && a[ny][nx] == '.') {
-            visited[ny][nx] = 1;
+            visited[ny][nx] = 1 ;
             go(ny, nx, depth+1);
             visited[ny][nx] = 0;
         }

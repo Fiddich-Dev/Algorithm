@@ -3,7 +3,7 @@ using namespace std;
 
 int n;
 string s;
-// 비트로 표현
+// 동전을 비트로 표현
 int aa[24];
 int ret = 1e9;
 
