@@ -1,94 +1,92 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int a[13][13];
-int ret = 1e9;
-int n = 10;
-int shape[8];
+int n, m, c;
+int a[54][54];
+int tempY, tempX;
+int dp[54][54][54][54];
 
-// 색종이를 붙일 수 있으면 true
-bool check(int y, int x, int value) {
-    // 범위 안에 있고
-    if(y + value - 1 < n && x + value - 1 < n) {
-        // 모두 1 이어야 함
-        for(int i = y; i < y + value; i++) {
-            for(int j = x; j < x + value; j++) {
-                if(a[i][j] != 1) {
-                    return false;
-                }
+int go(int y, int x, int cnt, int pre) {
+
+    if(cnt < 0) {
+        return 0;
+    }
+
+    if(y == n-1 && x == m-1) {
+        if(cnt == 0) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    int &ret = dp[y][x][cnt][pre];
+    if(ret != -1) {
+        return ret;
+    }
+
+    int temp1 = 0;
+    int temp2 = 0;
+    if(y+1 < n) {
+        // 오락실이 있을떄
+        if(a[y+1][x] != 0) {
+            // 오락실 번호가 이전 오락실 번호보다 클떄
+            if(a[y+1][x] > pre) {
+                temp1 = go(y+1, x, cnt-1, a[y+1][x]);
             }
         }
-        return true;
-    }
-    return false;
-}
-
-// 색종이 붙이기
-void solve1(int y, int x, int value) {
-    for(int i = y; i < y + value; i++) {
-        for(int j = x; j < x + value; j++) {
-            a[i][j] = 0;
+        // 오락실이 없을떄
+        else {
+            temp1 = go(y+1, x, cnt, pre);
         }
     }
-}
-// 색종이 떼기
-void solve2(int y, int x, int value) {
-    for(int i = y; i < y + value; i++) {
-        for(int j = x; j < x + value; j++) {
-            a[i][j] = 1;
-        }
-    }
-}
 
-// cnt는 붙인 색종이
-void dfs(int y, int x, int cnt) {
-    if(y == n) {
-        ret = min(ret, cnt);
-        return;
-    }
-
-    int nx = x+1 == n ? 0 : x+1;
-    int ny = nx == 0 ? y+1 : y;
-
-    if(a[y][x] == 0) {
-        dfs(ny, nx, cnt);
-        return;
-    }
-
-    // 색종이 붙이기 큰거부터
-    for(int i = 5; i >= 1; i--) {
-
-        // 붙일 수 있는지 확인
-        if(check(y, x, i) == true) {
-            if(shape[i] == 5) {
-                continue;
+    if(x+1 < m) {
+        // 오락실이 있을떄
+        if(a[y][x+1] != 0) {
+            // 오락실 번호가 이전 오락실 번호보다 클떄
+            if(a[y][x+1] > pre) {
+                temp2 = go(y, x+1, cnt-1, a[y][x+1]);
             }
-
-            // 색종이 붙이기
-            solve1(y, x, i);
-            shape[i]++;
-
-            dfs(ny, nx, cnt+1);
-
-            // 색종이 떼기
-            solve2(y, x, i);
-            shape[i]--;
-
+        }
+        // 오락실이 없을떄
+        else {
+            temp2 = go(y, x+1, cnt, pre);
         }
     }
+
+    return ret = (temp1 + temp2) % 1000007;
+
 }
 
 int main() {
+    cin >> n >> m >> c;
 
-    for(int i = 0; i < 10; i++) {
-        for(int j = 0; j < 10; j++) {
-            cin >> a[i][j];
+    memset(dp, -1, sizeof(dp));
+    
+    for(int i = 1; i <= c; i++) {
+        cin >> tempY >> tempX;
+        a[tempY-1][tempX-1] = i;
+    }
+
+
+    for(int i = 0; i <= c; i++) {
+        // (0, 0)에 오락실이 없을때
+        if(a[0][0] == 0) {
+            cout << go(0, 0, i, 0) << " ";
+        }
+        // (0, 0)에 오락실이 있을때
+        else {
+            cout << go(0, 0, i-1, a[0][0]) << " ";
         }
     }
 
-    
-    dfs(0, 0, 0);
-    
-	cout << (ret == 1e9 ? -1 : ret) << "\n";
+
+    cout << "\n";
 
 }
+
+// 테이블 : dp[y][x][앞으로 방문해야하는 오락실 수][이전에 방문했던 오락실 번호] = 현재지점까지 가능한 경우의 수
+// 점화식 : dp[y][x][앞으로 방문해야하는 오락실 수][이전에 방문했던 오락실 번호] = dp[y+1][x][앞으로 방문해야하는 오락실 수][이전에 방문했던 오락실 번호] + dp[y][x+1][앞으로 방문해야하는 오락실 수][이전에 방문했던 오락실 번호]
+// 초기화 : 
